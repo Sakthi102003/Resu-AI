@@ -1,0 +1,221 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  /* Animations */
+  @keyframes blob {
+    0% {
+      transform: translate(0px, 0px) scale(1);
+    }
+    33% {
+      transform: translate(30px, -50px) scale(1.1);
+    }
+    66% {
+      transform: translate(-20px, 20px) scale(0.9);
+    }
+    100% {
+      transform: translate(0px, 0px) scale(1);
+    }
+  }
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+
+  .animation-delay-1000 {
+    animation-delay: 1s;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 3s ease infinite;
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  @apply bg-gray-50 text-gray-900;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-white border-l-2 border-black;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-black border-2 border-white;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-800;
+}
+
+/* Animation utilities */
+@layer utilities {
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@layer components {
+  /* Chat bubble styles */
+  .chat-message {
+    @apply p-4 mb-4 animate-slide-up border-2 border-black shadow-neo-sm font-mono text-sm;
+  }
+
+  .chat-message.user {
+    @apply bg-brutal-blue text-black ml-auto max-w-[80%];
+  }
+
+  .chat-message.assistant {
+    @apply bg-white text-black mr-auto max-w-[80%];
+  }
+
+  /* Button styles */
+  .btn {
+    @apply px-4 py-2 font-bold border-2 border-black shadow-neo transition-all duration-200 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none uppercase tracking-wider text-sm;
+  }
+
+  .btn-primary {
+    @apply bg-brutal-yellow text-black hover:bg-yellow-300;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-black hover:bg-gray-100;
+  }
+
+  .btn-outline {
+    @apply bg-transparent text-black hover:bg-brutal-pink hover:text-black;
+  }
+
+  /* Card styles */
+  .card {
+    @apply bg-white shadow-neo border-2 border-black p-6;
+  }
+
+  /* Input styles */
+  .input {
+    @apply w-full px-4 py-2 border-2 border-black shadow-neo-sm focus:outline-none focus:shadow-neo focus:bg-yellow-50 font-mono text-sm;
+  }
+
+  .input-error {
+    @apply border-red-500 bg-red-50;
+  }
+}
+
+/* Loading spinner */
+.spinner {
+  border: 4px solid #000000;
+  border-top: 4px solid #facc15; /* brutal-yellow */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

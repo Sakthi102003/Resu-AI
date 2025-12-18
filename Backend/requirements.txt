@@ -1,0 +1,39 @@
+# FastAPI and Server
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+
+# Database
+motor==3.3.2
+pymongo==4.6.1
+
+# Authentication
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+
+# AI & NLP
+openai==1.12.0
+google-generativeai==0.3.2
+
+# Document Generation
+python-docx==1.1.0
+reportlab==4.0.9
+pypdf==4.0.1
+PyMuPDF==1.23.8
+Pillow==10.2.0
+pdf2image==1.17.0
+
+# Data Validation
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+
+# Environment Variables
+python-dotenv==1.0.0
+
+# CORS
+fastapi-cors==0.0.6
+
+# Utilities
+email-validator==2.1.0
+requests==2.31.0
