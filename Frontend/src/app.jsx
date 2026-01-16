@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthStore } from './Services/auth'
+import CustomCursor from './components/CustomCursor'
 
 // Pages
 import Home from './pages/Home'
@@ -29,12 +30,13 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   return (
-    <div className="App">
+    <div className="App cursor-none">
+      <CustomCursor />
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        
+
         {/* Protected Routes */}
         <Route
           path="/dashboard"
@@ -92,7 +94,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
+
         {/* Catch-all Route */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

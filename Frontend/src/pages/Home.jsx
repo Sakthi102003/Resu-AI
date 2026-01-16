@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../Services/auth'
+import { motion } from 'framer-motion'
+import Marquee from '../components/Marquee'
 
 const Home = () => {
   const navigate = useNavigate()
@@ -16,249 +18,345 @@ const Home = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", stiffness: 100 }
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-brutal-yellow relative overflow-hidden font-sans">
+    <div className="min-h-screen relative overflow-x-hidden font-sans selection:bg-cyber-primary selection:text-black">
+      {/* Background Blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10 bg-cyber-background">
+        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyber-secondary rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-blob"></div>
+        <div className="absolute top-[20%] right-[-10%] w-[500px] h-[500px] bg-cyber-primary rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-[-10%] left-[20%] w-[500px] h-[500px] bg-cyber-accent rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-blob animation-delay-4000"></div>
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
+      </div>
+
       {/* Navigation */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b-4 border-black ${
-        isScrolled ? 'bg-white shadow-neo' : 'bg-white'
-      }`}>
+      <motion.nav
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ type: "spring", stiffness: 100, damping: 20 }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-white/5 ${isScrolled ? 'bg-cyber-background/80 backdrop-blur-md shadow-lg shadow-cyber-primary/5' : 'bg-transparent backdrop-blur-sm'
+          }`}
+      >
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-3 group cursor-pointer">
-              <div className="w-12 h-12 bg-black flex items-center justify-center shadow-neo-sm transition-transform duration-300 hover:-translate-y-1 hover:translate-x-1 hover:shadow-none border-2 border-black">
-                <span className="text-white font-bold text-2xl">R</span>
-              </div>
-              <span className="text-3xl font-black text-black uppercase tracking-tighter">
+              <motion.div
+                whileHover={{ rotate: 180, scale: 1.1 }}
+                transition={{ duration: 0.5 }}
+                className="w-10 h-10 bg-gradient-to-tr from-cyber-primary to-cyber-secondary flex items-center justify-center rounded-lg shadow-glow-sm"
+              >
+                <span className="text-black font-black text-xl">R</span>
+              </motion.div>
+              <span className="text-2xl font-bold text-white tracking-tighter group-hover:text-cyber-primary transition-colors">
                 ResuAI
               </span>
             </Link>
             <div className="flex items-center space-x-4">
               {isAuthenticated ? (
-                <Link
-                  to="/dashboard"
-                  className="px-6 py-3 bg-black text-white border-2 border-black hover:bg-white hover:text-black hover:shadow-neo transition-all duration-300 font-bold uppercase tracking-wider"
-                >
-                  Dashboard
+                <Link to="/dashboard">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="glass-button px-6 py-2 rounded-full text-white font-medium text-sm flex items-center gap-2 hover:border-cyber-primary/50 hover:shadow-glow-sm"
+                  >
+                    Dashboard
+                  </motion.button>
                 </Link>
               ) : (
                 <>
                   <Link
                     to="/login"
-                    className="px-6 py-3 text-black font-bold hover:underline decoration-4 underline-offset-4 uppercase tracking-wider"
+                    className="hidden sm:block px-6 py-2 text-gray-300 hover:text-white font-medium transition-colors"
                   >
                     Login
                   </Link>
-                  <Link
-                    to="/login?signup=true"
-                    className="px-6 py-3 bg-brutal-pink text-black border-2 border-black shadow-neo hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-300 font-bold uppercase tracking-wider"
-                  >
-                    Get Started
+                  <Link to="/login?signup=true">
+                    <motion.button
+                      whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(0, 242, 255, 0.4)" }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-6 py-2 bg-gradient-to-r from-cyber-primary to-cyber-secondary text-black font-bold rounded-full shadow-glow-sm hover:brightness-110 transition-all"
+                    >
+                      Get Started
+                    </motion.button>
                   </Link>
                 </>
               )}
             </div>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-6 pt-32 pb-20 relative">
-        <div className="max-w-7xl mx-auto">
+      <section className="container mx-auto px-6 pt-32 pb-12 relative min-h-[90vh] flex items-center">
+        <div className="max-w-7xl mx-auto w-full">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
-            <div className="text-left space-y-8 animate-fade-in-up">
-              <div className="inline-flex items-center space-x-2 bg-white border-4 border-black px-6 py-3 shadow-neo transform -rotate-2 hover:rotate-0 transition-transform duration-200">
-                <span className="w-4 h-4 bg-brutal-green border-2 border-black"></span>
-                <span className="font-black font-mono text-base uppercase tracking-wider">AI-Powered Resume Builder</span>
-              </div>
-              
-              <h1 className="text-6xl md:text-8xl font-black text-black leading-none tracking-tighter">
-                BUILD YOUR
-                <span className="block text-white text-stroke-black">
-                  PERFECT RESUME
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className="text-left space-y-8 relative z-10"
+            >
+              <motion.div variants={itemVariants} className="inline-flex items-center space-x-2 glass-card px-4 py-2 rounded-full border border-white/10">
+                <span className="w-2 h-2 rounded-full bg-cyber-green animate-pulse shadow-[0_0_10px_#4ade80]"></span>
+                <span className="text-cyber-green font-mono text-xs uppercase tracking-widest">Next Gen Resume Builder</span>
+              </motion.div>
+
+              <motion.h1 variants={itemVariants} className="text-6xl md:text-7xl font-bold text-white leading-tight tracking-tight">
+                Craft Your <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyber-primary via-cyber-secondary to-cyber-accent animate-gradient bg-[length:200%_auto]">
+                  Digital Future
                 </span>
-              </h1>
-              
-              <p className="text-xl text-black font-bold border-l-8 border-black pl-6 py-4 bg-white border-y-4 border-r-4 shadow-neo-sm">
-                Create professional, ATS-optimized resumes in minutes with AI-powered suggestions. 
-                Stand out from the crowd and land your dream job faster.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row items-start gap-6 pt-8">
-                <Link
-                  to={isAuthenticated ? "/dashboard" : "/login?signup=true"}
-                  className="group px-10 py-5 bg-black text-white border-4 border-black shadow-neo-lg hover:shadow-none hover:translate-x-[6px] hover:translate-y-[6px] transition-all duration-200 font-black text-xl flex items-center space-x-3 uppercase tracking-widest"
-                >
-                  <span>{isAuthenticated ? "Go to Dashboard" : "Create Resume"}</span>
-                  <svg className="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
+              </motion.h1>
+
+              <motion.p variants={itemVariants} className="text-lg text-gray-400 max-w-lg leading-relaxed border-l-2 border-cyber-primary/50 pl-6">
+                Forge professional, ATS-optimized resumes with our AI-powered engine.
+                Stand out in the digital noise.
+              </motion.p>
+
+              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-6 pt-4">
+                <Link to={isAuthenticated ? "/dashboard" : "/login?signup=true"}>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="group px-8 py-4 bg-white text-black rounded-lg font-bold text-lg flex items-center gap-3 hover:bg-cyber-primary transition-colors shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+                  >
+                    <span>{isAuthenticated ? "Go to Dashboard" : "Start Building"}</span>
+                    <motion.span
+                      animate={{ x: [0, 5, 0] }}
+                      transition={{ repeat: Infinity, duration: 1.5 }}
+                    >
+                      →
+                    </motion.span>
+                  </motion.button>
                 </Link>
-                <button
-                  onClick={() => document.getElementById('features').scrollIntoView({ behavior: 'smooth' })}
-                  className="group px-10 py-5 bg-white text-black border-4 border-black shadow-neo-lg hover:shadow-none hover:translate-x-[6px] hover:translate-y-[6px] transition-all duration-200 font-black text-xl flex items-center space-x-3 uppercase tracking-widest"
-                >
-                  <span>Learn More</span>
-                  <svg className="w-6 h-6 group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                  </svg>
-                </button>
-              </div>
+                <div className="flex items-center gap-4 text-sm font-mono text-gray-500">
+                  <span className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-cyber-primary rounded-full"></span> AI Powered
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-cyber-secondary rounded-full"></span> ATS Friendly
+                  </span>
+                </div>
+              </motion.div>
 
               {/* Stats */}
-              <div className="flex items-center space-x-8 pt-8 border-t-4 border-black">
+              <motion.div variants={itemVariants} className="flex gap-12 pt-8 border-t border-white/10">
                 <div>
-                  <div className="text-5xl font-black text-black">10k+</div>
-                  <div className="text-sm font-black font-mono uppercase bg-white px-2 border-2 border-black inline-block transform -rotate-2 shadow-neo-sm">Resumes Created</div>
+                  <div className="text-3xl font-bold text-white mb-1">10k+</div>
+                  <div className="text-xs text-cyber-primary uppercase tracking-wider font-mono">Resumes Built</div>
                 </div>
                 <div>
-                  <div className="text-5xl font-black text-black">95%</div>
-                  <div className="text-sm font-black font-mono uppercase bg-white px-2 border-2 border-black inline-block transform rotate-2 shadow-neo-sm">Success Rate</div>
+                  <div className="text-3xl font-bold text-white mb-1">95%</div>
+                  <div className="text-xs text-cyber-secondary uppercase tracking-wider font-mono">Success Rate</div>
                 </div>
-                <div>
-                  <div className="text-5xl font-black text-black">4.9/5</div>
-                  <div className="text-sm font-black font-mono uppercase bg-white px-2 border-2 border-black inline-block transform -rotate-1 shadow-neo-sm">User Rating</div>
-                </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
             {/* Right Content - Visual Element */}
-            <div className="relative animate-fade-in-up animation-delay-300 hidden md:block">
-              <div className="relative bg-white border-4 border-black shadow-neo-lg p-8 transform rotate-2 hover:rotate-0 transition-transform duration-300">
-                {/* Mock Resume Preview */}
-                <div className="space-y-6 border-4 border-dashed border-gray-300 p-6">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-20 h-20 bg-black border-4 border-black"></div>
-                    <div className="flex-1 space-y-3">
-                      <div className="h-6 bg-black w-3/4"></div>
-                      <div className="h-4 bg-gray-400 w-1/2"></div>
+            <motion.div
+              initial={{ opacity: 0, x: 100, scale: 0.8 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{ type: "spring", duration: 1.5 }}
+              className="relative hidden md:block perspective-1000"
+            >
+              <motion.div
+                animate={{
+                  y: [-15, 15, -15],
+                  rotateX: [5, -5, 5],
+                  rotateY: [-5, 5, -5]
+                }}
+                transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
+                className="relative glass-card p-1 rounded-2xl border border-white/10 shadow-2xl shadow-cyber-primary/10"
+              >
+                {/* Mock Resume UI */}
+                <div className="bg-[#0a0a0a] rounded-xl p-8 aspect-[3/4] overflow-hidden relative">
+                  <div className="absolute inset-0 bg-gradient-to-b from-cyber-primary/5 to-transparent pointer-events-none"></div>
+
+                  {/* Header */}
+                  <div className="flex gap-6 mb-8">
+                    <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-gray-800 to-black border border-white/10"></div>
+                    <div className="space-y-3 flex-1">
+                      <div className="h-6 w-3/4 bg-white/10 rounded animate-pulse"></div>
+                      <div className="h-4 w-1/2 bg-white/5 rounded"></div>
                     </div>
                   </div>
-                  <div className="space-y-3 pt-4 border-t-4 border-black">
-                    <div className="h-4 bg-gray-300 w-full"></div>
-                    <div className="h-4 bg-gray-300 w-full"></div>
-                    <div className="h-4 bg-gray-300 w-5/6"></div>
+
+                  {/* Lines */}
+                  <div className="space-y-4">
+                    {[1, 2, 3, 4].map((i) => (
+                      <div key={i} className="space-y-2">
+                        <div className="h-3 w-full bg-white/5 rounded"></div>
+                        <div className="h-3 w-5/6 bg-white/5 rounded"></div>
+                      </div>
+                    ))}
                   </div>
-                  <div className="pt-4 space-y-4">
-                    <div className="h-6 bg-brutal-blue w-1/3 border-4 border-black"></div>
-                    <div className="space-y-3">
-                      <div className="h-4 bg-gray-300 w-full"></div>
-                      <div className="h-4 bg-gray-300 w-4/5"></div>
-                    </div>
-                  </div>
+
+                  {/* Floating Elements */}
+                  <motion.div
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ repeat: Infinity, duration: 4, delay: 1 }}
+                    className="absolute top-20 right-[-20px] glass-card px-4 py-2 rounded-lg border border-cyber-accent/30 text-cyber-accent text-xs font-bold shadow-lg shadow-cyber-accent/20"
+                  >
+                    Optimization: 98%
+                  </motion.div>
+
+                  <motion.div
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ repeat: Infinity, duration: 4, delay: 0 }}
+                    className="absolute bottom-20 left-[-20px] glass-card px-4 py-2 rounded-lg border border-cyber-primary/30 text-cyber-primary text-xs font-bold shadow-lg shadow-cyber-primary/20"
+                  >
+                    Skills Matched
+                  </motion.div>
                 </div>
-                
-                {/* Floating badges */}
-                <div className="absolute -top-6 -right-6 bg-brutal-pink text-black border-4 border-black px-6 py-3 font-black shadow-neo transform rotate-12">
-                  ATS OPTIMIZED ✓
-                </div>
-                <div className="absolute -bottom-6 -left-6 bg-brutal-green text-black border-4 border-black px-6 py-3 font-black shadow-neo transform -rotate-12">
-                  AI POWERED 🚀
-                </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="bg-white border-t-4 border-black py-20">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-20 space-y-4">
-            <div className="inline-block">
-              <span className="bg-black text-white px-6 py-2 font-mono font-bold uppercase tracking-wider border-4 border-black shadow-neo-sm transform -rotate-1">
-                Features
-              </span>
-            </div>
-            <h2 className="text-5xl md:text-7xl font-black text-black uppercase leading-none">
-              Everything You Need<br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brutal-blue to-brutal-purple" style={{ WebkitTextStroke: '2px black' }}>
-                To Land The Job
-              </span>
-            </h2>
-          </div>
+      {/* Marquee Section */}
+      <div className="border-y border-white/10 bg-black/30 backdrop-blur-sm z-20 relative transform -rotate-1 skew-x-12 scale-110 origin-left my-20">
+        <Marquee
+          items={["Future Ready", "AI Enhanced", "Cyber Secure", "Career Boost", "Next Level"]}
+          speed={30}
+          className="bg-transparent text-white/50"
+        />
+      </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+      {/* Features Section */}
+      <section id="features" className="py-24 relative z-0">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-20 space-y-4"
+          >
+            <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
+              Upgrade Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyber-primary to-cyber-secondary">CareerOS</span>
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Advanced tools for the modern professional. Built with precision, powered by intelligence.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-6 max-w-7xl mx-auto">
             {[
-              { title: 'AI-Powered Content', icon: '🤖', color: 'bg-brutal-blue', desc: 'Get intelligent suggestions and enhancements for your resume content.' },
-              { title: 'ATS Optimization', icon: '🎯', color: 'bg-brutal-pink', desc: 'Ensure your resume passes Applicant Tracking Systems with our intelligent scoring.' },
-              { title: 'Job Recommendations', icon: '💼', color: 'bg-brutal-green', desc: 'Get personalized job recommendations based on your skills and experience.' },
-              { title: 'AI Chat Assistant', icon: '💬', color: 'bg-brutal-yellow', desc: 'Chat with our AI assistant to get instant help and suggestions.' },
-              { title: 'Multiple Templates', icon: '📄', color: 'bg-brutal-purple', desc: 'Choose from professionally designed templates that make your resume stand out.' },
-              { title: 'Export Options', icon: '📥', color: 'bg-brutal-red', desc: 'Download your resume in multiple formats including PDF and DOCX.' },
+              { title: 'Neural Engine', icon: '🧠', color: 'text-cyber-primary', desc: 'Deep learning models analyze and enhance your professional story.' },
+              { title: 'ATS Bypass', icon: '🛡️', color: 'text-cyber-accent', desc: 'Algorithm-friendly formats designed to pass automated screenings.' },
+              { title: 'Smart Match', icon: '⚡', color: 'text-cyber-secondary', desc: 'Real-time job matching based on your unique skill signature.' },
+              { title: 'AI Assistant', icon: '🤖', color: 'text-cyber-primary', desc: '24/7 intelligent chat support for career guidance.' },
+              { title: 'Holographic Templates', icon: '💠', color: 'text-cyber-secondary', desc: 'Stand out with next-gen visual layouts.' },
+              { title: 'Multi-Format Export', icon: '💾', color: 'text-cyber-accent', desc: 'Universal compatibility with PDF, DOCX, and JSON exports.' },
             ].map((feature, idx) => (
-              <div key={idx} className="group bg-white p-8 border-4 border-black shadow-neo hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all duration-200">
-                <div className={`w-16 h-16 ${feature.color} border-4 border-black flex items-center justify-center mb-6 shadow-neo-sm`}>
-                  <span className="text-3xl">{feature.icon}</span>
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                whileHover={{ y: -5, backgroundColor: "rgba(255,255,255,0.05)" }}
+                className="group glass-card p-8 rounded-2xl border border-white/5 transition-all duration-300 hover:border-cyber-primary/30 hover:shadow-glow-sm cursor-pointer"
+              >
+                <div className="mb-6 w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300">
+                  {feature.icon}
                 </div>
-                <h3 className="text-2xl font-black text-black mb-3 uppercase">{feature.title}</h3>
-                <p className="text-black font-bold leading-relaxed border-l-4 border-black pl-4">
+                <h3 className={`text-xl font-bold text-white mb-3 group-hover:${feature.color} transition-colors`}>{feature.title}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
                   {feature.desc}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="bg-brutal-blue border-t-4 border-black py-20">
-        <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto bg-white border-4 border-black shadow-neo-lg p-12 text-center relative overflow-hidden">
+      <section className="py-24 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-cyber-primary/5"></div>
+        <div className="container mx-auto px-6 relative z-10">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            viewport={{ once: true }}
+            className="max-w-4xl mx-auto glass-card rounded-3xl p-12 text-center border border-white/10 shadow-glow-lg overflow-hidden"
+          >
             <div className="relative z-10 space-y-8">
-              <h2 className="text-4xl md:text-6xl font-black text-black uppercase leading-none">
-                Ready to Build Your<br/>Perfect Resume?
+              <h2 className="text-4xl md:text-5xl font-bold text-white">
+                Initialize Your Sequence
               </h2>
-              <p className="text-xl font-black text-black max-w-2xl mx-auto border-b-4 border-black pb-4 inline-block">
-                Join thousands of job seekers who have successfully landed their dream jobs with ResuAI
+              <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+                Join the network of professionals who have upgraded their career trajectory.
               </p>
-              
+
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
-                <Link
-                  to={isAuthenticated ? "/dashboard" : "/login?signup=true"}
-                  className="px-12 py-6 bg-black text-white border-4 border-black shadow-neo-lg hover:bg-brutal-yellow hover:text-black hover:shadow-none hover:translate-x-[6px] hover:translate-y-[6px] transition-all duration-200 font-black text-2xl uppercase tracking-widest"
-                >
-                  {isAuthenticated ? "Go to Dashboard" : "Get Started Now"}
+                <Link to={isAuthenticated ? "/dashboard" : "/login?signup=true"}>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-12 py-4 bg-white text-black rounded-full font-bold text-lg hover:bg-cyber-primary transition-colors shadow-glow"
+                  >
+                    {isAuthenticated ? "Enter Dashboard" : "Get Started Free"}
+                  </motion.button>
                 </Link>
               </div>
             </div>
-          </div>
+
+            {/* Decorative background grid */}
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)] pointer-events-none"></div>
+          </motion.div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-black text-white border-t-4 border-black pt-20 pb-10">
+      <footer className="border-t border-white/10 bg-black/50 backdrop-blur-md pt-20 pb-10">
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-white border-2 border-white flex items-center justify-center">
-                  <span className="text-black font-black text-xl">R</span>
+                <div className="w-8 h-8 rounded bg-gradient-to-br from-cyber-primary to-cyber-secondary flex items-center justify-center">
+                  <span className="text-black font-bold text-sm">R</span>
                 </div>
-                <span className="text-2xl font-black uppercase">ResuAI</span>
+                <span className="text-xl font-bold text-white">ResuAI</span>
               </div>
-              <p className="text-gray-400 font-mono text-sm">
-                Build your perfect resume with AI-powered technology.
+              <p className="text-gray-500 text-sm">
+                Next-generation career tools for the digital age.
               </p>
             </div>
-            
+
             {['Product', 'Company', 'Legal'].map((col) => (
               <div key={col}>
-                <h3 className="text-lg font-bold mb-4 uppercase border-b-2 border-white/20 pb-2 inline-block">{col}</h3>
-                <ul className="space-y-2 text-gray-400 font-mono text-sm">
-                  <li><a href="#" className="hover:text-brutal-yellow hover:underline decoration-2 underline-offset-4">Link 1</a></li>
-                  <li><a href="#" className="hover:text-brutal-yellow hover:underline decoration-2 underline-offset-4">Link 2</a></li>
-                  <li><a href="#" className="hover:text-brutal-yellow hover:underline decoration-2 underline-offset-4">Link 3</a></li>
+                <h3 className="text-white font-bold mb-4">{col}</h3>
+                <ul className="space-y-2 text-gray-500 text-sm">
+                  <li><a href="#" className="hover:text-cyber-primary transition-colors">Link 1</a></li>
+                  <li><a href="#" className="hover:text-cyber-primary transition-colors">Link 2</a></li>
+                  <li><a href="#" className="hover:text-cyber-primary transition-colors">Link 3</a></li>
                 </ul>
               </div>
             ))}
           </div>
 
-          <div className="border-t-2 border-white/20 pt-8 flex flex-col md:flex-row items-center justify-between font-mono text-sm text-gray-400">
-            <p>&copy; 2025 ResuAI. All rights reserved.</p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              {/* Social Icons */}
-            </div>
+          <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between text-sm text-gray-600">
+            <p>&copy; 2025 ResuAI. System Status: Online.</p>
           </div>
         </div>
       </footer>

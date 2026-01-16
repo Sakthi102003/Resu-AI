@@ -9,8 +9,6 @@ import {
   Download,
   Trash2,
   Edit,
-  Sparkles,
-  FileCode,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAuthStore } from '../Services/auth'
@@ -38,7 +36,6 @@ export default function Dashboard() {
   }
 
   const handleCreateResume = () => {
-    // Navigate to template selection page
     navigate('/template-selection')
   }
 
@@ -56,7 +53,6 @@ export default function Dashboard() {
 
   const handleExportPDF = async (id, title) => {
     try {
-      // Export with the resume's stored template (no override)
       const response = await resumeAPI.exportPDF(id, null)
       const url = window.URL.createObjectURL(new Blob([response.data]))
       const link = document.createElement('a')
@@ -78,33 +74,33 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
+    <div className="min-h-screen bg-transparent font-sans text-white">
       {/* Header */}
-      <header className="bg-white border-b-2 border-black">
+      <header className="fixed top-0 left-0 right-0 z-40 bg-cyber-background/80 backdrop-blur-md border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <button
               onClick={() => navigate('/')}
               className="flex items-center gap-3 hover:opacity-80 transition-opacity group"
             >
-              <div className="w-10 h-10 bg-black flex items-center justify-center shadow-neo-sm group-hover:shadow-none group-hover:translate-x-[2px] group-hover:translate-y-[2px] transition-all border-2 border-black">
-                <span className="text-white font-bold text-xl">R</span>
+              <div className="w-10 h-10 bg-gradient-to-br from-cyber-primary to-cyber-secondary flex items-center justify-center rounded-lg shadow-glow-sm">
+                <span className="text-black font-black text-xl">R</span>
               </div>
-              <h1 className="text-2xl font-black text-black uppercase tracking-tighter">ResuAI</h1>
+              <h1 className="text-2xl font-bold text-white tracking-tighter">ResuAI</h1>
             </button>
             <div className="flex items-center gap-4">
               <button
                 onClick={() => navigate('/profile')}
-                className="flex items-center gap-2 px-4 py-2 text-black border-2 border-transparent hover:border-black hover:bg-brutal-yellow transition-all font-bold uppercase text-sm"
+                className="flex items-center gap-2 px-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-full transition-all text-sm font-medium"
               >
-                <User className="w-5 h-5" />
+                <User className="w-4 h-4" />
                 <span className="hidden sm:inline">{user?.full_name || user?.email}</span>
               </button>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 text-black border-2 border-transparent hover:border-black hover:bg-brutal-red hover:text-white transition-all font-bold uppercase text-sm"
+                className="flex items-center gap-2 px-4 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-full transition-all text-sm font-medium"
               >
-                <LogOut className="w-5 h-5" />
+                <LogOut className="w-4 h-4" />
                 <span className="hidden sm:inline">Logout</span>
               </button>
             </div>
@@ -113,124 +109,129 @@ export default function Dashboard() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8 border-l-4 border-black pl-6 py-2 bg-white">
-          <h2 className="text-3xl font-black text-black mb-2 uppercase">
-            Welcome back, {user?.full_name?.split(' ')[0] || 'there'}! 👋
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        {/* Welcome Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-12"
+        >
+          <h2 className="text-3xl font-bold text-white mb-2">
+            Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyber-primary to-cyber-secondary">{user?.full_name?.split(' ')[0] || 'User'}</span>
           </h2>
-          <p className="text-black font-mono">
-            Create and manage your AI-powered resumes
+          <p className="text-gray-400 font-mono text-sm max-w-2xl">
+            Workspace active. Ready to deploy career assets.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Create New Resume Cards */}
+        {/* Create New Resume Card */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
             className="md:col-span-3"
           >
             <button
               onClick={handleCreateResume}
-              className="w-full bg-white border-2 border-black shadow-neo hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all flex flex-col items-center justify-center gap-3 py-12 group"
+              className="w-full glass-card hover:bg-white/5 transition-all duration-300 flex flex-col items-center justify-center gap-4 py-16 rounded-2xl group border border-white/10 hover:border-cyber-primary/50 hover:shadow-glow-sm"
             >
-              <div className="w-20 h-20 bg-brutal-green border-2 border-black rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Plus className="w-10 h-10 text-black" />
+              <div className="w-16 h-16 rounded-full bg-cyber-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform border border-cyber-primary/20">
+                <Plus className="w-8 h-8 text-cyber-primary" />
               </div>
-              <span className="text-2xl font-black text-black uppercase tracking-wider">
-                Create New Resume
-              </span>
-              <span className="text-base text-black font-mono px-4 max-w-md">
-                Select your template and theme, then build your professional resume
-              </span>
+              <div className="text-center">
+                <span className="text-2xl font-bold text-white tracking-wide block mb-2">
+                  Initialize New Resume
+                </span>
+                <span className="text-sm text-gray-400 font-mono px-4 max-w-md block">
+                  Select a holographic template and begin the generation sequence
+                </span>
+              </div>
             </button>
           </motion.div>
         </div>
 
         {/* Resumes Grid */}
-        {isLoading ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="spinner" />
-          </div>
-        ) : resumes.length === 0 ? (
-          <div className="text-center py-12 border-2 border-black bg-white shadow-neo">
-            <FileText className="w-16 h-16 text-black mx-auto mb-4" />
-            <h3 className="text-xl font-black text-black mb-2 uppercase">
-              No resumes yet
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+              <FileText className="w-5 h-5 text-cyber-secondary" />
+              Active Projects
             </h3>
-            <p className="text-black font-mono mb-6">
-              Create your first resume using our AI-powered chat interface
-            </p>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {resumes.map((resume, index) => (
-              <motion.div
-                key={resume.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white border-2 border-black shadow-neo p-6 hover:shadow-neo-lg transition-all group"
-              >
-                <div className="flex items-start justify-between mb-4 border-b-2 border-black pb-4">
-                  <div className="flex-1">
-                    <h3 className="text-lg font-black text-black mb-1 uppercase truncate pr-2">
-                      {resume.title}
-                    </h3>
-                    <p className="text-xs text-black font-mono">
-                      Updated {new Date(resume.updated_at).toLocaleDateString()}
-                    </p>
+
+          {isLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="w-8 h-8 border-2 border-cyber-primary border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : resumes.length === 0 ? (
+            <div className="text-center py-16 glass-card rounded-2xl border border-white/5 border-dashed">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/5 flex items-center justify-center">
+                <FileText className="w-8 h-8 text-gray-500" />
+              </div>
+              <h3 className="text-lg font-medium text-white mb-2">
+                No active projects found
+              </h3>
+              <p className="text-gray-500 font-mono text-sm">
+                Begin by initializing a new resume sequence above
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {resumes.map((resume, index) => (
+                <motion.div
+                  key={resume.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="glass-card p-6 rounded-xl hover:bg-white/5 transition-all border border-white/10 hover:border-cyber-secondary/30 group"
+                >
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-white mb-1 truncate pr-2 group-hover:text-cyber-secondary transition-colors">
+                        {resume.title}
+                      </h3>
+                      <p className="text-xs text-gray-500 font-mono">
+                        Last sync: {new Date(resume.updated_at).toLocaleDateString()}
+                      </p>
+                    </div>
                     {resume.ats_score && (
-                      <div className="mt-2">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs font-bold text-black uppercase bg-brutal-yellow px-2 py-0.5 border border-black">
-                            ATS Score
-                          </span>
-                          <span
-                            className={`text-sm font-black ${
-                              resume.ats_score >= 80
-                                ? 'text-green-600'
-                                : resume.ats_score >= 60
-                                ? 'text-yellow-600'
-                                : 'text-red-600'
-                            }`}
-                          >
-                            {resume.ats_score}/100
-                          </span>
-                        </div>
+                      <div className={`px-2 py-1 rounded text-xs font-bold font-mono ${resume.ats_score >= 80 ? 'bg-green-500/20 text-green-400' :
+                          resume.ats_score >= 60 ? 'bg-yellow-500/20 text-yellow-400' :
+                            'bg-red-500/20 text-red-400'
+                        }`}>
+                        {resume.ats_score}%
                       </div>
                     )}
                   </div>
-                  <div className="w-10 h-10 bg-brutal-blue border-2 border-black flex items-center justify-center">
-                    <FileText className="w-6 h-6 text-black" />
-                  </div>
-                </div>
 
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => navigate(`/editor/latex/${resume.id}`)}
-                    className="flex-1 btn bg-black text-white hover:bg-gray-800"
-                  >
-                    <Edit className="w-4 h-4 inline mr-1" />
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleExportPDF(resume.id, resume.title)}
-                    className="btn bg-white text-black hover:bg-brutal-green"
-                  >
-                    <Download className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => handleDeleteResume(resume.id)}
-                    className="btn bg-white text-black hover:bg-brutal-red hover:text-white"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        )}
+                  <div className="grid grid-cols-3 gap-3">
+                    <button
+                      onClick={() => navigate(`/editor/latex/${resume.id}`)}
+                      className="col-span-1 flex flex-col items-center justify-center gap-1 py-3 rounded-lg bg-white/5 hover:bg-white/10 hover:text-cyber-primary transition-all text-xs font-medium text-gray-400"
+                    >
+                      <Edit className="w-4 h-4" />
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleExportPDF(resume.id, resume.title)}
+                      className="col-span-1 flex flex-col items-center justify-center gap-1 py-3 rounded-lg bg-white/5 hover:bg-white/10 hover:text-cyber-secondary transition-all text-xs font-medium text-gray-400"
+                    >
+                      <Download className="w-4 h-4" />
+                      PDF
+                    </button>
+                    <button
+                      onClick={() => handleDeleteResume(resume.id)}
+                      className="col-span-1 flex flex-col items-center justify-center gap-1 py-3 rounded-lg bg-white/5 hover:bg-red-500/20 hover:text-red-400 transition-all text-xs font-medium text-gray-400"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Delete
+                    </button>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </div>
       </main>
     </div>
   )
